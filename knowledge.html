@@ -1,0 +1,390 @@
+bash
+
+cat > /mnt/user-data/outputs/knowledge.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>База знаний — nimax</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #F7F8FC; color: #1A2560; }
+  .nav { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-size: 18px; font-weight: 700; color: #1A2560; letter-spacing: -0.5px; text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 13px; color: #6B7280; text-decoration: none; }
+  .nav-links a:hover, .nav-links a.active { color: #1A2560; font-weight: 500; }
+  .hero { background: #EEF2FF; padding: 48px 40px; position: relative; border-bottom: 1px solid #E0E7FF; }
+  .hero::before, .hero::after { content: ''; position: absolute; width: 16px; height: 16px; border-color: #1A256040; border-style: solid; }
+  .hero::before { top: 16px; left: 16px; border-width: 1.5px 0 0 1.5px; }
+  .hero::after { top: 16px; right: 16px; border-width: 1.5px 1.5px 0 0; }
+  .hero-label { font-size: 11px; font-weight: 500; color: #1A256066; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+  .hero-title { font-size: 32px; font-weight: 700; color: #1A2560; line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 10px; }
+  .hero-sub { font-size: 14px; color: #6B7280; max-width: 520px; line-height: 1.7; }
+  .layout { max-width: 1200px; margin: 0 auto; padding: 40px 40px 60px; display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
+  .sidebar { position: sticky; top: 76px; }
+  .sidebar-label { font-size: 11px; font-weight: 500; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+  .sidebar-link { display: block; font-size: 13px; color: #6B7280; text-decoration: none; padding: 7px 12px; border-radius: 7px; margin-bottom: 2px; line-height: 1.4; }
+  .sidebar-link:hover { background: #EEF2FF; color: #1A2560; }
+  .sidebar-link.active { background: #EEF2FF; color: #1A2560; font-weight: 500; }
+  .content article { display: none; }
+  .content article.active { display: block; }
+  .article-label { font-size: 11px; font-weight: 500; color: #1A256066; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+  .article-title { font-size: 24px; font-weight: 700; color: #1A2560; margin-bottom: 8px; letter-spacing: -0.3px; }
+  .article-desc { font-size: 14px; color: #6B7280; line-height: 1.7; margin-bottom: 32px; max-width: 600px; }
+  .article-section { margin-bottom: 32px; }
+  .article-section h3 { font-size: 15px; font-weight: 600; color: #1A2560; margin-bottom: 12px; }
+  .article-section p { font-size: 14px; color: #4B5563; line-height: 1.7; margin-bottom: 10px; }
+  .cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .info-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px; }
+  .info-card-icon { font-size: 20px; margin-bottom: 8px; }
+  .info-card-title { font-size: 13px; font-weight: 600; color: #1A2560; margin-bottom: 4px; }
+  .info-card-text { font-size: 13px; color: #6B7280; line-height: 1.6; }
+  .steps-list { list-style: none; counter-reset: steps; }
+  .steps-list li { counter-increment: steps; display: flex; gap: 14px; margin-bottom: 16px; }
+  .steps-list li::before { content: counter(steps); width: 28px; height: 28px; border-radius: 50%; background: #1A2560; color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .steps-list li div { font-size: 14px; color: #4B5563; line-height: 1.6; padding-top: 3px; }
+  .steps-list li strong { color: #1A2560; font-weight: 500; }
+  .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .principle { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 16px 18px; display: flex; gap: 12px; }
+  .principle-num { font-size: 11px; font-weight: 700; color: #A5B4FC; min-width: 24px; padding-top: 1px; }
+  .principle-title { font-size: 13px; font-weight: 600; color: #1A2560; margin-bottom: 3px; }
+  .principle-text { font-size: 12px; color: #6B7280; line-height: 1.5; }
+  .alert { border-radius: 10px; padding: 16px 18px; margin-bottom: 16px; display: flex; gap: 12px; }
+  .alert-green { background: #F0FDF4; border: 1px solid #BBF7D0; }
+  .alert-red { background: #FFF5F5; border: 1px solid #FED7D7; }
+  .alert-blue { background: #EEF2FF; border: 1px solid #C7D2FE; }
+  .alert-icon { font-size: 18px; flex-shrink: 0; }
+  .alert-title { font-size: 13px; font-weight: 600; color: #1A2560; margin-bottom: 3px; }
+  .alert-text { font-size: 13px; color: #4B5563; line-height: 1.6; }
+  .doc-link { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 14px 18px; text-decoration: none; color: inherit; margin-bottom: 8px; transition: border-color 0.15s; }
+  .doc-link:hover { border-color: #A5B4FC; }
+  .doc-icon { font-size: 20px; }
+  .doc-title { font-size: 13px; font-weight: 500; color: #1A2560; }
+  .doc-sub { font-size: 12px; color: #9CA3AF; }
+  .contact-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+  .contact-avatar { width: 44px; height: 44px; border-radius: 50%; background: #E0E7FF; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1A2560; flex-shrink: 0; }
+  .contact-name { font-size: 14px; font-weight: 500; color: #1A2560; margin-bottom: 2px; }
+  .contact-role { font-size: 12px; color: #9CA3AF; margin-bottom: 4px; }
+  .contact-tg { font-size: 13px; color: #4F46E5; }
+  .tag-inline { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; background: #E0E7FF; color: #1A2560; margin: 2px; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .cards-2 { grid-template-columns: 1fr; }
+    .principles { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">nimax</a>
+  <div class="nav-links">
+    <a href="index.html">Каталог партнёров</a>
+    <a href="how-it-works.html">Как работает</a>
+    <a href="knowledge.html" class="active">База знаний</a>
+    <a href="documents.html">Документы</a>
+    <a href="contacts.html">Контакты</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Партнёрская программа nimax</div>
+  <h1 class="hero-title">База знаний</h1>
+  <p class="hero-sub">Инструкции и материалы для сотрудников агентства — всё что нужно знать для уверенной работы с партнёрами.</p>
+</section>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-label">Статьи</div>
+    <a class="sidebar-link active" onclick="showArticle('about', this)">О партнёрской программе</a>
+    <a class="sidebar-link" onclick="showArticle('guide', this)">Инструкция для менеджера</a>
+    <a class="sidebar-link" onclick="showArticle('contracts', this)">Договорная база</a>
+    <a class="sidebar-link" onclick="showArticle('principles', this)">Принципы nimax</a>
+    <a class="sidebar-link" onclick="showArticle('links', this)">Полезные ссылки</a>
+  </aside>
+
+  <div class="content">
+
+    <!-- ARTICLE 1 -->
+    <article id="about" class="active">
+      <div class="article-label">Статья 1 из 5</div>
+      <h1 class="article-title">О партнёрской программе</h1>
+      <p class="article-desc">Партнёрская программа nimax — это система взаимовыгодного сотрудничества с агентствами и специалистами, которые закрывают задачи за пределами нашей экспертизы.</p>
+
+      <div class="article-section">
+        <h3>Три формата сотрудничества</h3>
+        <div class="cards-2">
+          <div class="info-card">
+            <div class="info-card-icon">🔄</div>
+            <div class="info-card-title">Монетизация нецелевых лидов</div>
+            <div class="info-card-text">Передаём партнёрам запросы, которые не подходят под профиль nimax. Партнёр реализует проект, мы получаем вознаграждение с каждой успешной сделки.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">📥</div>
+            <div class="info-card-title">Дополнительный трафик</div>
+            <div class="info-card-text">Партнёры передают нам заявки, которые соответствуют нашей экспертизе. Работает в обе стороны — мы тоже источник лидов для партнёров.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">🤝</div>
+            <div class="info-card-title">Совместные проекты</div>
+            <div class="info-card-text">Привлекаем партнёров в комплексные проекты nimax. Вместе развиваем ключевых клиентов и создаём сильные кейсы.</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon">⭐</div>
+            <div class="info-card-title">Почему партнёры выбирают nimax</div>
+            <div class="info-card-text">26 лет на рынке, 12 экспертных групп, NPS 9.75, клиенты — OZON, Газпром нефть, Kaspersky, Mail.ru. Работа с nimax усиливает репутацию партнёра.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-section">
+        <h3>Что это значит для сотрудников агентства</h3>
+        <p>Когда клиент просит услугу, которую мы не делаем — это не тупик. Это возможность сохранить отношения с клиентом и передать его в надёжные руки. Портал помогает найти нужного партнёра быстро.</p>
+        <p>Партнёры — продолжение бренда nimax. Мы несём репутационную ответственность за тех, кого рекомендуем, поэтому в каталоге только проверенные компании.</p>
+      </div>
+    </article>
+
+    <!-- ARTICLE 2 -->
+    <article id="guide">
+      <div class="article-label">Статья 2 из 5</div>
+      <h1 class="article-title">Инструкция для менеджера</h1>
+      <p class="article-desc">Пошаговый гайд: что делать когда появился запрос, который выходит за рамки nimax.</p>
+
+      <div class="article-section">
+        <h3>Шаг за шагом</h3>
+        <ol class="steps-list">
+          <li><div><strong>Квалифицируй запрос.</strong> Убедись что задача действительно вне зоны nimax — не спеши передавать то, что мы можем сделать сами или с привлечением внутренних ресурсов.</div></li>
+          <li><div><strong>Получи согласие клиента.</strong> Прямо спроси: «Мы можем привлечь специализированного партнёра под эту задачу — вы не против, если мы передадим ваш контакт?» Без согласия передача не начинается.</div></li>
+          <li><div><strong>Найди партнёра в каталоге.</strong> Используй фильтры по услуге и нише клиента. Обрати внимание на поле «Когда рекомендуем» — оно создано именно для таких ситуаций.</div></li>
+          <li><div><strong>Проверь статус партнёра.</strong> Убедись что статус «Активен». Если «Пауза» — не передавай без уточнения у менеджера программы.</div></li>
+          <li><div><strong>Обратись к менеджеру программы.</strong> Опиши запрос, назови выбранного партнёра. Менеджер подтвердит или предложит лучший вариант.</div></li>
+          <li><div><strong>Собери всё о клиенте.</strong> Задачи, бюджет, сроки, история переговоров, особенности коммуникации, болевые точки. Чем больше контекста — тем лучше старт у партнёра.</div></li>
+          <li><div><strong>Передача.</strong> Менеджер программы берёт на себя финальную передачу партнёру. Твоя роль завершена — если не договорились об ином.</div></li>
+        </ol>
+      </div>
+
+      <div class="article-section">
+        <h3>Что говорить клиенту</h3>
+        <div class="alert alert-blue">
+          <div class="alert-icon">💬</div>
+          <div>
+            <div class="alert-title">Скрипт для менеджера</div>
+            <div class="alert-text">«Эта задача выходит за рамки нашего профиля, но у нас есть проверенный партнёр с опытом именно в этой области. Мы подберём лучший вариант и передадим все детали — вы не почувствуете разрыва. Можем двигаться в этом направлении?»</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-section">
+        <h3>Красные флаги — когда стоит остановиться</h3>
+        <div class="alert alert-red">
+          <div class="alert-icon">🚩</div>
+          <div>
+            <div class="alert-title">Не рекомендуй партнёра если:</div>
+            <div class="alert-text">Статус партнёра «Пауза» или «Не рекомендуем» · Партнёр давно не отвечает на запросы · Нет кейсов в нужной нише или бюджетном диапазоне · Есть внутренний комментарий с предупреждением · Ты не уверен — лучше спроси менеджера программы</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-section">
+        <h3>Если передача не сработала</h3>
+        <p>Партнёр не подошёл клиенту или клиент остался недоволен — сообщи менеджеру программы. Это важная обратная связь: мы обновим карточку партнёра или пересмотрим его статус. Не замалчивай негативный опыт.</p>
+      </div>
+    </article>
+
+    <!-- ARTICLE 3 -->
+    <article id="contracts">
+      <div class="article-label">Статья 3 из 5</div>
+      <h1 class="article-title">Договорная база</h1>
+      <p class="article-desc">С каждым партнёром у nimax заключён двусторонний договор. Это защищает обе стороны и фиксирует условия сотрудничества.</p>
+
+      <div class="article-section">
+        <h3>Партнёрский договор</h3>
+        <p>Двусторонний договор фиксирует условия передачи лидов, размер вознаграждения, обязательства сторон и порядок взаимодействия. Для большинства случаев достаточно заполнить реквизиты в готовом шаблоне — ничего изобретать не нужно.</p>
+        <div class="alert alert-green">
+          <div class="alert-icon">✅</div>
+          <div>
+            <div class="alert-title">Как пользоваться шаблоном</div>
+            <div class="alert-text">Скачай шаблон из раздела «Документы» → вставь реквизиты партнёра → согласуй с менеджером программы → подпиши. Всё. Юридически корректный договор за 15 минут.</div>
+          </div>
+        </div>
+        <a href="documents.html" class="doc-link">
+          <div class="doc-icon">📄</div>
+          <div>
+            <div class="doc-title">Шаблон партнёрского договора</div>
+            <div class="doc-sub">Перейти в раздел «Документы»</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="article-section">
+        <h3>NDA</h3>
+        <p>Соглашение о неразглашении — по согласованной форме nimax. Подписывается когда партнёр получает доступ к конфиденциальным материалам клиента или внутренним данным агентства.</p>
+        <div class="alert alert-blue">
+          <div class="alert-icon">ℹ️</div>
+          <div>
+            <div class="alert-title">Когда нужен NDA</div>
+            <div class="alert-text">Если в брифе есть коммерческая тайна · Если клиент явно попросил конфиденциальность · Если партнёр будет работать с персональными данными · В остальных случаях — по договорённости с менеджером программы</div>
+          </div>
+        </div>
+        <a href="documents.html" class="doc-link">
+          <div class="doc-icon">🔒</div>
+          <div>
+            <div class="doc-title">Шаблон NDA</div>
+            <div class="doc-sub">Перейти в раздел «Документы»</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="article-section">
+        <h3>Важно помнить</h3>
+        <p>Все финансовые условия, проценты и детали взаимодействия фиксируются в договоре открыто. Мы работаем «в белую» и не скрываем условий от партнёров. Это один из принципов nimax.</p>
+      </div>
+    </article>
+
+    <!-- ARTICLE 4 -->
+    <article id="principles">
+      <div class="article-label">Статья 4 из 5</div>
+      <h1 class="article-title">Принципы nimax в работе с партнёрами</h1>
+      <p class="article-desc">Восемь принципов, которые делают сотрудничество с nimax надёжным и предсказуемым. Полезно знать когда объясняешь партнёрство клиенту или самому партнёру.</p>
+
+      <div class="article-section">
+        <div class="principles">
+          <div class="principle">
+            <div class="principle-num">01</div>
+            <div>
+              <div class="principle-title">Репутация и опыт</div>
+              <div class="principle-text">26 лет на рынке, клиенты — лидеры отраслей. Сотрудничество с nimax усиляет доверие к партнёру со стороны его клиентов.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">02</div>
+            <div>
+              <div class="principle-title">Brand experience</div>
+              <div class="principle-text">Комплексный подход 360°: стратегия, маркетинг, дизайн. Закрываем задачи любого уровня — от дизайн-поддержки до многолетних проектов.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">03</div>
+            <div>
+              <div class="principle-title">Экспертность команды</div>
+              <div class="principle-text">12 экспертных групп, ~100 специалистов. Преподаём, выступаем, делимся фреймворками — партнёры получают доступ к экспертизе напрямую.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">04</div>
+            <div>
+              <div class="principle-title">Сильный маркетинг</div>
+              <div class="principle-text">Открываем партнёрам доступ к брейншерам, гайдам, инсайтам. Готовы к совместным кейсам, публикациям и отраслевым мероприятиям.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">05</div>
+            <div>
+              <div class="principle-title">Обратная связь</div>
+              <div class="principle-text">NPS 9.75, CSI 8.5. Регулярные встречи с клиентами, результаты делимся с партнёрами — вместе находим точки роста.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">06</div>
+            <div>
+              <div class="principle-title">Понимание специфики</div>
+              <div class="principle-text">У нас была своя студия разработки — понимаем внутренние процессы веб-команд. Говорим с партнёрами на одном языке.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">07</div>
+            <div>
+              <div class="principle-title">Открытость и доверие</div>
+              <div class="principle-text">Работаем «в белую». Открытый документооборот, все условия зафиксированы. Готовы к NDA и совместной публичной активности.</div>
+            </div>
+          </div>
+          <div class="principle">
+            <div class="principle-num">08</div>
+            <div>
+              <div class="principle-title">Постоянная поддержка</div>
+              <div class="principle-text">Каждому партнёру — выделенный партнёрский менеджер и проектный менеджер. Всегда знаешь к кому обратиться.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ARTICLE 5 -->
+    <article id="links">
+      <div class="article-label">Статья 5 из 5</div>
+      <h1 class="article-title">Полезные ссылки и контакты</h1>
+      <p class="article-desc">Все важные контакты и каналы в одном месте.</p>
+
+      <div class="article-section">
+        <h3>Контакты программы</h3>
+        <div class="contact-card">
+          <div class="contact-avatar">КН</div>
+          <div>
+            <div class="contact-name">Кристина Новикова</div>
+            <div class="contact-role">Менеджер партнёрской программы</div>
+            <div class="contact-tg">@nookristina</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-section">
+        <h3>Telegram-каналы nimax</h3>
+        <a href="https://t.me/nimax_agency" target="_blank" class="doc-link">
+          <div class="doc-icon">📢</div>
+          <div>
+            <div class="doc-title">Канал nimax</div>
+            <div class="doc-sub">@nimax_agency — новости агентства, кейсы, анонсы</div>
+          </div>
+        </a>
+        <a href="https://t.me/mikheenkovnews" target="_blank" class="doc-link">
+          <div class="doc-icon">✍️</div>
+          <div>
+            <div class="doc-title">Канал CEO Никиты Михеенкова</div>
+            <div class="doc-sub">@mikheenkovnews — «Сломай и сделай нормально»</div>
+          </div>
+        </a>
+        <a href="https://t.me/NimaxAgencyBot" target="_blank" class="doc-link">
+          <div class="doc-icon">🤖</div>
+          <div>
+            <div class="doc-title">Telegram-бот Nimax</div>
+            <div class="doc-sub">@NimaxAgencyBot — быстрые ответы на вопросы</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="article-section">
+        <h3>Другие ресурсы</h3>
+        <a href="https://nimax.ru" target="_blank" class="doc-link">
+          <div class="doc-icon">🌐</div>
+          <div>
+            <div class="doc-title">Сайт nimax</div>
+            <div class="doc-sub">nimax.ru — портфолио, команда, услуги</div>
+          </div>
+        </a>
+      </div>
+    </article>
+
+  </div>
+</div>
+
+<script>
+  function showArticle(id, link) {
+    document.querySelectorAll('.content article').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    link.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
+HTMLEOF
+echo "Done"
