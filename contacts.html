@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контакты — nimax</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #F7F8FC; color: #1A2560; }
+  .nav { background: #fff; border-bottom: 1px solid #E5E7EB; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
+  .nav-logo { font-size: 18px; font-weight: 700; color: #1A2560; letter-spacing: -0.5px; text-decoration: none; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 13px; color: #6B7280; text-decoration: none; }
+  .nav-links a:hover, .nav-links a.active { color: #1A2560; font-weight: 500; }
+  .hero { background: #EEF2FF; padding: 48px 40px; position: relative; border-bottom: 1px solid #E0E7FF; }
+  .hero::before, .hero::after { content: ''; position: absolute; width: 16px; height: 16px; border-color: #1A256040; border-style: solid; }
+  .hero::before { top: 16px; left: 16px; border-width: 1.5px 0 0 1.5px; }
+  .hero::after { top: 16px; right: 16px; border-width: 1.5px 1.5px 0 0; }
+  .hero-label { font-size: 11px; font-weight: 500; color: #1A256066; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+  .hero-title { font-size: 32px; font-weight: 700; color: #1A2560; line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 10px; }
+  .hero-sub { font-size: 14px; color: #6B7280; max-width: 520px; line-height: 1.7; }
+  .container { max-width: 800px; margin: 0 auto; padding: 40px 40px 60px; }
+  .section-label { font-size: 11px; font-weight: 500; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
+  .contact-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 20px; }
+  .avatar { width: 52px; height: 52px; border-radius: 50%; background: #E0E7FF; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #1A2560; flex-shrink: 0; }
+  .contact-info { flex: 1; }
+  .contact-name { font-size: 16px; font-weight: 600; color: #1A2560; margin-bottom: 2px; }
+  .contact-role { font-size: 13px; color: #9CA3AF; margin-bottom: 8px; }
+  .contact-links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .contact-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #E5E7EB; color: #1A2560; background: #fff; transition: border-color 0.15s; }
+  .contact-btn:hover { border-color: #1A2560; }
+  .contact-btn.primary { background: #1A2560; color: #fff; border-color: #1A2560; }
+  .contact-btn.primary:hover { opacity: 0.88; }
+  .contact-desc { font-size: 13px; color: #6B7280; line-height: 1.6; margin-top: 10px; padding-top: 10px; border-top: 1px solid #F3F4F6; }
+  .section { margin-bottom: 36px; }
+  .channels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .channel-card { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px; text-decoration: none; color: inherit; display: block; transition: border-color 0.15s; }
+  .channel-card:hover { border-color: #A5B4FC; }
+  .channel-icon { font-size: 22px; margin-bottom: 8px; }
+  .channel-title { font-size: 14px; font-weight: 500; color: #1A2560; margin-bottom: 3px; }
+  .channel-handle { font-size: 13px; color: #4F46E5; margin-bottom: 4px; }
+  .channel-desc { font-size: 12px; color: #9CA3AF; line-height: 1.5; }
+  @media (max-width: 700px) {
+    .channels { grid-template-columns: 1fr; }
+    .contact-card { flex-direction: column; align-items: flex-start; }
+    .nav-links { display: none; }
+    .hero { padding: 32px 20px; }
+    .container { padding: 24px 20px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">nimax</a>
+  <div class="nav-links">
+    <a href="index.html">Каталог партнёров</a>
+    <a href="how-it-works.html">Как работает</a>
+    <a href="knowledge.html">База знаний</a>
+    <a href="documents.html">Документы</a>
+    <a href="contacts.html" class="active">Контакты</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Партнёрская программа nimax</div>
+  <h1 class="hero-title">Контакты</h1>
+  <p class="hero-sub">Кто за что отвечает внутри агентства и где нас найти.</p>
+</section>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-label">Менеджер программы</div>
+    <div class="contact-card">
+      <img src="kristina.png" alt="Кристина Новикова" style="width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+      <div class="contact-info">
+        <div class="contact-name">Кристина Новикова</div>
+        <div class="contact-role">Менеджер партнёрской программы</div>
+        <div class="contact-links">
+          <a href="https://t.me/nookristina" target="_blank" class="contact-btn primary">✈ Написать в Telegram</a>
+        </div>
+        <div class="contact-desc">Подбор партнёров под запрос, согласование передачи лидов, вопросы по договорам и NDA, обратная связь по партнёрам.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Telegram-каналы nimax</div>
+    <div class="channels">
+      <a href="https://t.me/nimax_agency" target="_blank" class="channel-card">
+        <div class="channel-icon">📢</div>
+        <div class="channel-title">Канал nimax</div>
+        <div class="channel-handle">@nimax_agency</div>
+        <div class="channel-desc">Новости агентства, кейсы, анонсы мероприятий</div>
+      </a>
+      <a href="https://t.me/mikheenkovnews" target="_blank" class="channel-card">
+        <div class="channel-icon">✍️</div>
+        <div class="channel-title">Канал CEO Никиты Михеенкова</div>
+        <div class="channel-handle">@mikheenkovnews</div>
+        <div class="channel-desc">«Сломай и сделай нормально» — про управление и digital</div>
+      </a>
+      <a href="https://t.me/NimaxAgencyBot" target="_blank" class="channel-card">
+        <div class="channel-icon">🤖</div>
+        <div class="channel-title">Telegram-бот Nimax</div>
+        <div class="channel-handle">@NimaxAgencyBot</div>
+        <div class="channel-desc">Быстрые ответы на вопросы об агентстве</div>
+      </a>
+      <a href="https://nimax.ru" target="_blank" class="channel-card">
+        <div class="channel-icon">🌐</div>
+        <div class="channel-title">Сайт nimax</div>
+        <div class="channel-handle">nimax.ru</div>
+        <div class="channel-desc">Портфолио, команда, услуги агентства</div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
