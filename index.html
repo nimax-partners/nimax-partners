@@ -44,7 +44,7 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
   .filter-btn:hover { border-color: #A5B4FC; color: #1A2560; }
   .filter-btn.active { background: #1A2560; color: #fff; border-color: #1A2560; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px; }
-  .card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; transition: border-color 0.15s; cursor: pointer; text-decoration: none; display: block; color: inherit; }
+  .card { background: #fff; border: 1px solid #E5E7EB; border-radius: 12px; padding: 20px; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; display: block; color: inherit; }
   .card:hover { border-color: #A5B4FC; box-shadow: 0 4px 16px #1A256010; }
   .card.hidden { display: none; }
   .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
@@ -72,6 +72,36 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
   .ql-icon { width: 36px; height: 36px; border-radius: 8px; background: #EEF2FF; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
   .ql-title { font-size: 14px; font-weight: 500; color: #1A2560; margin-bottom: 2px; }
   .ql-sub { font-size: 12px; color: #9CA3AF; }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(15,20,50,0.5); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 16px; max-width: 620px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 24px 64px rgba(15,20,50,0.2); }
+  .modal-header { padding: 24px 24px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .modal-close { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #E5E7EB; background: #fff; cursor: pointer; font-size: 16px; color: #6B7280; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-close:hover { background: #F3F4F6; }
+  .modal-top { display: flex; align-items: center; gap: 14px; }
+  .modal-avatar { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+  .modal-name { font-size: 20px; font-weight: 600; color: #1A2560; margin-bottom: 2px; }
+  .modal-site { font-size: 13px; color: #4F46E5; text-decoration: none; }
+  .modal-site:hover { text-decoration: underline; }
+  .modal-body { padding: 20px 24px 24px; }
+  .modal-desc { font-size: 14px; color: #4B5563; line-height: 1.7; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #F3F4F6; }
+  .modal-section { margin-bottom: 16px; }
+  .modal-label { font-size: 11px; font-weight: 500; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .modal-divider { border: none; border-top: 1px solid #F3F4F6; margin: 16px 0; }
+  .modal-contacts { display: flex; flex-direction: column; gap: 8px; }
+  .modal-contact-row { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4B5563; }
+  .modal-contact-row a { color: #4F46E5; text-decoration: none; }
+  .modal-contact-row a:hover { text-decoration: underline; }
+  .modal-comment { background: #F9FAFB; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #6B7280; line-height: 1.6; }
+  .modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+  .modal-btn-primary { flex: 1; padding: 10px; background: #1A2560; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; text-decoration: none; display: block; }
+  .modal-btn-primary:hover { opacity: 0.88; }
+  .modal-btn-outline { flex: 1; padding: 10px; background: #fff; color: #1A2560; border: 1px solid #E5E7EB; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; text-align: center; text-decoration: none; display: block; }
+  .modal-btn-outline:hover { border-color: #1A2560; }
+
   @media (max-width: 900px) {
     .tiles { grid-template-columns: repeat(2, 1fr); }
     .cards { grid-template-columns: repeat(2, 1fr); }
@@ -174,7 +204,7 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 
     <div class="cards" id="cardsGrid">
 
-      <a class="card" href="#" data-name="Redis" data-services="веб-разработка брендинг видеопродакшн тильда дизайн">
+      <div class="card" onclick="openModal('redis')" data-name="Redis" data-services="веб-разработка брендинг видеопродакшн тильда дизайн">
         <div class="card-top">
           <div class="avatar" style="background:#FEF3C7;color:#92400E;">R</div>
           <div>
@@ -198,14 +228,14 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
           <span class="budget">500к–1млн</span>
           <span class="status"><span class="status-dot"></span>Активен</span>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="#" data-name="DelaWeb" data-services="веб-разработка тильда мобильная разработка геймификация мини апп тестирование">
+      <div class="card" onclick="openModal('delaweb')" data-name="DelaWeb" data-services="веб-разработка тильда мобильная разработка геймификация мини апп тестирование">
         <div class="card-top">
           <div class="avatar" style="background:#E0E7FF;color:#1A2560;">D</div>
           <div>
             <div class="card-name">DelaWeb</div>
-            <div class="card-desc">Создаём и развиваем цифровые продукты для автоматизации бизнеса</div>
+            <div class="card-desc">Цифровые продукты для автоматизации бизнеса</div>
           </div>
         </div>
         <div class="tags">
@@ -222,14 +252,14 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
           <span class="budget">2млн+</span>
           <span class="status"><span class="status-dot"></span>Активен</span>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="#" data-name="TopFace Media" data-services="orm репутация отзывы">
+      <div class="card" onclick="openModal('topface')" data-name="TopFace Media" data-services="orm репутация отзывы">
         <div class="card-top">
           <div class="avatar" style="background:#FCE7F3;color:#9D174D;">T</div>
           <div>
             <div class="card-name">TopFace Media</div>
-            <div class="card-desc">Управление репутацией бренда в интернете (ORM)</div>
+            <div class="card-desc">Управление репутацией бренда в интернете</div>
           </div>
         </div>
         <div class="tags">
@@ -246,14 +276,14 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
           <span class="budget">до 100к</span>
           <span class="status"><span class="status-dot"></span>Активен</span>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="#" data-name="ОК digital" data-services="seo контекст реклама">
+      <div class="card" onclick="openModal('okdigital')" data-name="ОК digital" data-services="seo контекст реклама">
         <div class="card-top">
           <div class="avatar" style="background:#DCFCE7;color:#166534;">О</div>
           <div>
             <div class="card-name">ОК digital</div>
-            <div class="card-desc">SEO-продвижение и контекстная реклама для малого и среднего бизнеса</div>
+            <div class="card-desc">SEO и контекстная реклама для малого и среднего бизнеса</div>
           </div>
         </div>
         <div class="tags">
@@ -270,9 +300,9 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
           <span class="budget">до 100к</span>
           <span class="status"><span class="status-dot"></span>Активен</span>
         </div>
-      </a>
+      </div>
 
-      <a class="card" href="#" data-name="OnePix" data-services="веб-разработка тильда мобильная разработка геймификация мини апп тестирование">
+      <div class="card" onclick="openModal('onepix')" data-name="OnePix" data-services="веб-разработка тильда мобильная разработка геймификация мини апп тестирование">
         <div class="card-top">
           <div class="avatar" style="background:#F0FDF4;color:#166534;">O</div>
           <div>
@@ -296,7 +326,7 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
           <span class="budget">500к–1млн</span>
           <span class="status"><span class="status-dot"></span>Активен</span>
         </div>
-      </a>
+      </div>
 
     </div>
     <div class="no-results" id="noResults">Партнёры не найдены. Попробуйте другой запрос.</div>
@@ -330,37 +360,220 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 
 </div>
 
+<!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-top">
+        <div class="modal-avatar" id="modalAvatar"></div>
+        <div>
+          <div class="modal-name" id="modalName"></div>
+          <a class="modal-site" id="modalSite" href="#" target="_blank"></a>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-desc" id="modalDesc"></div>
+
+      <div class="modal-section">
+        <div class="modal-label">Услуги</div>
+        <div class="modal-tags" id="modalServices"></div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-label">Когда рекомендуем</div>
+        <div class="modal-tags" id="modalNiche"></div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-label">Бюджет клиента</div>
+        <div id="modalBudget" style="font-size:14px;color:#1A2560;font-weight:500;"></div>
+      </div>
+
+      <hr class="modal-divider">
+
+      <div class="modal-section">
+        <div class="modal-label">Контакты</div>
+        <div class="modal-contacts" id="modalContacts"></div>
+      </div>
+
+      <div class="modal-section" id="modalCommentWrap" style="display:none;">
+        <div class="modal-label">Внутренний комментарий</div>
+        <div class="modal-comment" id="modalComment"></div>
+      </div>
+
+      <div class="modal-section" id="modalInternalWrap" style="display:none;">
+        <div class="modal-label">Кто работал внутри</div>
+        <div style="font-size:14px;color:#4B5563;" id="modalInternal"></div>
+      </div>
+
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-  function setFilter(val) {
-    document.querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.toggle('active', b.textContent.trim() === val || (val === 'Все' && b.textContent.trim() === 'Все'));
-    });
-    let visible = 0;
-    document.querySelectorAll('.card').forEach(c => {
-      if (val === 'Все') { c.classList.remove('hidden'); visible++; }
-      else {
-        const s = (c.dataset.services || '').toLowerCase();
-        const show = s.includes(val.toLowerCase());
-        c.classList.toggle('hidden', !show);
-        if (show) visible++;
-      }
-    });
-    document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
-    if (val !== 'Все') document.getElementById('cardsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+const partners = {
+  redis: {
+    name: 'Redis',
+    site: 'https://redis.agency/',
+    desc: 'Дизайн-поддержка для брендов и корпораций. Более 17 лет помогаем маркетингу, HR и бренд-командам делать тысячи задач: быстро и точно по бренду.',
+    services: ['Веб-разработка', 'Брендинг', 'Видеопродакшн', 'Tilda'],
+    niche: ['E-commerce', 'B2B', 'FMCG', 'Крупный бизнес'],
+    budget: '500к–1млн',
+    telegram: '@boevov',
+    email: 'vb@redis.agency',
+    cases: 'https://drive.google.com/file/d/12NQ7SDdiw8NSf_YAj-aNo1rU8asBUIJs/view',
+    internal: 'Кристина и Ваня',
+    comment: 'Крутые ребята, сильные кейсы, гибкий подход — сами реализуют и брендинг и разработку. Быстро и технологично.',
+    avatarBg: '#FEF3C7', avatarColor: '#92400E', avatarLetter: 'R'
+  },
+  delaweb: {
+    name: 'DelaWeb',
+    site: 'https://delaweb.ru/',
+    desc: 'Создаём и развиваем цифровые продукты для автоматизации бизнеса. Хорошая, дорогая разработка — нацелены на крупный чек и качественную реализацию. Есть поддержка после релиза.',
+    services: ['Веб-разработка', 'Мобильная разработка', 'Геймификация', 'Мини-апп', 'Тестирование', 'Tilda'],
+    niche: ['Крупный бизнес'],
+    budget: '2млн+',
+    telegram: '@uarrem',
+    email: 'hi@delaweb.ru',
+    cases: 'https://drive.google.com/file/d/1_aQqyUvqzdDI95TrVt-E7RFf61yJJc0m/view',
+    internal: 'Кристина',
+    comment: 'Хорошая, дорогая разработка — нацелены на крупный чек и качественную реализацию. Есть поддержка после релиза.',
+    avatarBg: '#E0E7FF', avatarColor: '#1A2560', avatarLetter: 'D'
+  },
+  topface: {
+    name: 'TopFace Media',
+    site: 'https://topfacemedia.com/',
+    desc: 'Управление репутацией (ORM) — комплекс услуг по созданию или исправлению репутации в интернете: отзывы, комментарии, посты и упоминания.',
+    services: ['ORM'],
+    niche: ['E-commerce', 'B2B', 'FMCG', 'Крупный бизнес', 'Малый бизнес'],
+    budget: 'до 100к',
+    telegram: '@jrtopface',
+    email: 'hi+6013441@topfacemedia.com',
+    cases: 'https://docs.google.com/presentation/d/1R5w9C2arZqs2bj3a_VrJtbCNvbNFenF8/edit',
+    internal: 'Кристина',
+    comment: 'Работа с репутацией бренда — отзывы, комментарии, посты и упоминания.',
+    avatarBg: '#FCE7F3', avatarColor: '#9D174D', avatarLetter: 'T'
+  },
+  okdigital: {
+    name: 'ОК digital',
+    site: 'https://ok-digital.pro/',
+    desc: 'SEO-продвижение и контекстная реклама для малого и среднего бизнеса с оборотом от 100 млн ₽ в год.',
+    services: ['SEO', 'Контекст'],
+    niche: ['E-commerce', 'B2B', 'FMCG', 'Малый бизнес'],
+    budget: 'до 100к',
+    telegram: '@dmitry_dyu',
+    email: 'info@ok-digital.pro',
+    cases: 'https://drive.google.com/file/d/1Af0oN_B09UDTS2X5uLm6Swkl_dU2ocQ8/view',
+    internal: 'Кристина',
+    comment: 'SEO-оптимизация со стоимостью ниже нашей.',
+    avatarBg: '#DCFCE7', avatarColor: '#166534', avatarLetter: 'О'
+  },
+  onepix: {
+    name: 'OnePix',
+    site: 'https://onepix.ru/',
+    desc: 'Разработка для бизнеса, где технологии работают на результат. Берут проекты в разработку и долгосрочную поддержку. Экспертиза в архитектуре и развитии веб-продуктов.',
+    services: ['Веб-разработка', 'Мобильная разработка', 'Геймификация', 'Мини-апп', 'Тестирование', 'Tilda'],
+    niche: ['E-commerce', 'B2B', 'FMCG', 'Крупный бизнес', 'Малый бизнес'],
+    budget: '500к–1млн',
+    telegram: '@artembel',
+    email: 'four@onepix.ru',
+    cases: 'https://onepix.ru/portfolio',
+    internal: 'Кристина',
+    comment: 'Проверенные партнёры, любая разработка, внедряют вайб-кодинг — что сильно снижает стоимость.',
+    avatarBg: '#F0FDF4', avatarColor: '#166534', avatarLetter: 'O'
+  }
+};
+
+function openModal(id) {
+  const p = partners[id];
+  if (!p) return;
+
+  document.getElementById('modalAvatar').style.background = p.avatarBg;
+  document.getElementById('modalAvatar').style.color = p.avatarColor;
+  document.getElementById('modalAvatar').textContent = p.avatarLetter;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalSite').textContent = p.site;
+  document.getElementById('modalSite').href = p.site;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalBudget').textContent = p.budget;
+
+  document.getElementById('modalServices').innerHTML = p.services.map(s =>
+    `<span class="tag tag-blue">${s}</span>`).join('');
+  document.getElementById('modalNiche').innerHTML = p.niche.map(n =>
+    `<span class="tag tag-green">${n}</span>`).join('');
+
+  let contacts = '';
+  if (p.telegram) contacts += `<div class="modal-contact-row">✈ <a href="https://t.me/${p.telegram.replace('@','')}" target="_blank">${p.telegram}</a></div>`;
+  if (p.email) contacts += `<div class="modal-contact-row">✉ <a href="mailto:${p.email}">${p.email}</a></div>`;
+  document.getElementById('modalContacts').innerHTML = contacts;
+
+  if (p.comment) {
+    document.getElementById('modalComment').textContent = p.comment;
+    document.getElementById('modalCommentWrap').style.display = 'block';
+  } else {
+    document.getElementById('modalCommentWrap').style.display = 'none';
   }
 
-  function filterCards() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    let visible = 0;
-    document.querySelectorAll('.card').forEach(c => {
-      const name = (c.dataset.name || '').toLowerCase();
-      const services = (c.dataset.services || '').toLowerCase();
-      const show = q.length === 0 || name.includes(q) || services.includes(q);
+  if (p.internal) {
+    document.getElementById('modalInternal').textContent = p.internal;
+    document.getElementById('modalInternalWrap').style.display = 'block';
+  } else {
+    document.getElementById('modalInternalWrap').style.display = 'none';
+  }
+
+  let actions = '';
+  if (p.telegram) actions += `<a href="https://t.me/${p.telegram.replace('@','')}" target="_blank" class="modal-btn-primary">✈ Написать в Telegram</a>`;
+  if (p.cases) actions += `<a href="${p.cases}" target="_blank" class="modal-btn-outline">📁 Кейсы</a>`;
+  document.getElementById('modalActions').innerHTML = actions;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function setFilter(val) {
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === val || (val === 'Все' && b.textContent.trim() === 'Все'));
+  });
+  let visible = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    if (val === 'Все') { c.classList.remove('hidden'); visible++; }
+    else {
+      const s = (c.dataset.services || '').toLowerCase();
+      const show = s.includes(val.toLowerCase());
       c.classList.toggle('hidden', !show);
       if (show) visible++;
-    });
-    document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
-  }
+    }
+  });
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+  if (val !== 'Все') document.getElementById('cardsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const name = (c.dataset.name || '').toLowerCase();
+    const services = (c.dataset.services || '').toLowerCase();
+    const show = q.length === 0 || name.includes(q) || services.includes(q);
+    c.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+}
 </script>
 
 </body>
