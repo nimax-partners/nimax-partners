@@ -1,6 +1,8 @@
 bash
 
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
+cat /mnt/user-data/outputs/index.html
+Output
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,7 +19,9 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
   .nav-links { display: flex; gap: 28px; }
   .nav-links a { font-size: 14px; color: #6B7280; text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover, .nav-links a.active { color: #1A2560; font-weight: 500; }
-  .hero { background: #EEF2FF; padding: 56px 56px; position: relative; border-bottom: 1px solid #E0E7FF; }
+  .hero { background: #EEF2FF; padding: 56px 56px; position: relative; border-bottom: 1px solid #E0E7FF; overflow: hidden; }
+  .hero-bg { position: absolute; top: 0; right: 0; height: 100%; width: 55%; object-fit: cover; object-position: left center; opacity: 0.9; pointer-events: none; }
+  .hero-content { position: relative; z-index: 1; max-width: 600px; }
   .hero::before, .hero::after { content: ''; position: absolute; width: 16px; height: 16px; border-color: #1A256040; border-style: solid; }
   .hero::before { top: 16px; left: 16px; border-width: 1.5px 0 0 1.5px; }
   .hero::after { top: 16px; right: 16px; border-width: 1.5px 1.5px 0 0; }
@@ -131,12 +135,15 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 </nav>
 
 <section class="hero">
+  <img src="hero-bg.png" alt="" class="hero-bg">
+  <div class="hero-content">
   <div class="hero-label">Партнёрская программа nimax</div>
   <h1 class="hero-title">Найдите нужного партнёра<br>за две минуты</h1>
   <p class="hero-sub">Внутренний портал для сотрудников агентства. Посоветуйтесь с командой и передайте клиентский запрос правильному партнёру.</p>
   <div class="search-wrap">
     <input class="search-input" id="searchInput" placeholder="Поиск по услуге, нише или названию..." oninput="filterCards()">
     <button class="btn-primary" onclick="filterCards()">Найти</button>
+  </div>
   </div>
 </section>
 
@@ -578,5 +585,3 @@ function filterCards() {
 
 </body>
 </html>
-HTMLEOF
-echo "Done"
